@@ -77,7 +77,7 @@ Projeto desenvolvido, durante a trilha Ignite Frontend. Para gestão financeira 
 <!-- CONTACT -->
 ## Contato
 
-<p align="center"><a href=https://www.linkedin.com/in/elvis-felix" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/elvis-felix" height="30" width="40" /></a></p>
+<p align="center"><a href="https://www.linkedin.com/in/elvis-felix" target="blank"><img align="center" src="https://raw.githubusercontent.com/rahuldkjain/github-profile-readme-generator/master/src/images/icons/Social/linked-in-alt.svg" alt="https://www.linkedin.com/in/elvis-felix" height="30" width="40" /></a></p>
 
 
 <p align="right">(<a href="#topo">Para o topo</a>)</p>
