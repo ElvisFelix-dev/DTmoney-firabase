@@ -1,0 +1,20 @@
+{
+  "rules": {
+    "transactions": {
+      ".read": false,
+      ".write": "auth != null",
+      "descrption": {
+        ".read": true,
+        ".write": "auth != null && (!data.exists() || data.parent('authorId').val() == auth.id)",
+        "price": {
+          ".read": true,
+          ".write": "auth != null && (!data.exists() || data.parent().child('authorId').val() == auth.id)",
+          "category": {
+            ".read": true,
+            ".write": "auth != null && (!data.exists() || data.parent('authorId').val() == auth.id)" 
+          }
+        }
+      }
+    }
+  }
+}
