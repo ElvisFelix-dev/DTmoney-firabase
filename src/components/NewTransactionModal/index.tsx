@@ -89,7 +89,7 @@ export function NewTransactionModal() {
               variant="income"
               value="income"
               onClick={() => setTransactionType('income')}
-              active={Boolean(transactionType === 'income')}
+              $active={transactionType === 'income'}
             >
               <ArrowCircleUp size={24} />
               Entrada
@@ -99,7 +99,7 @@ export function NewTransactionModal() {
               variant="outcome"
               value="outcome"
               onClick={() => setTransactionType('outcome')}
-              active={Boolean(transactionType === 'outcome')}
+              $active={transactionType === 'outcome'}
             >
               <ArrowCircleDown size={24} />
               Saída
