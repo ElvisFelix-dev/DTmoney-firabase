@@ -1,16 +1,18 @@
+import { useEffect, useState } from 'react'
 import { ArrowCircleUp, CurrencyDollar, ArrowCircleDown } from 'phosphor-react'
 import { SummaryCard, SummaryContainer } from './styles'
-import { useEffect, useState } from 'react'
+import { priceFormatter } from '../../utils/formatter'
 
-import { firebase } from '../../services/firebase'
+import { auth, firebase } from '../../services/firebase'
 
 interface SummaryProps {
-  income: number
-  outcome: number
+  income: number | string
+  outcome: number | string
   total: number | string
 }
 
 export function Summary() {
+  const [user, setUser] = useState<firebase.User | null>(null)
   const [summary, setSummary] = useState<SummaryProps>({
     income: 0,
     outcome: 0,
@@ -18,8 +20,18 @@ export function Summary() {
   })
 
   useEffect(() => {
+    const unlisten = auth.onAuthStateChanged((authUser) => {
+      setUser(authUser)
+    })
+
+    return () => {
+      unlisten()
+    }
+  }, [])
+
+  useEffect(() => {
     async function fetchSummary() {
-      const userId = firebase.auth().currentUser?.uid
+      const userId = user?.uid
 
       if (userId) {
         const userTransactions = await firebase
@@ -27,35 +39,29 @@ export function Summary() {
           .ref(`users/${userId}/transactions`)
           .get()
 
-        console.log(userTransactions.val())
-
-        const { income, outcome } = userTransactions.val().reduce(
-          (
-            acc: { income: any; outcome: any },
-            transaction: { type: string; price: any },
-          ) => {
+        const { income, outcome } = Object.values(
+          userTransactions.val(),
+        ).reduce<{ income: number; outcome: number }>(
+          (acc: any, transaction: any) => {
             if (transaction.type === 'income') {
-              acc.income += transaction.price
+              acc.income += Number(transaction.price)
             } else {
-              acc.outcome += transaction.price
+              acc.outcome += Number(transaction.price)
             }
             return acc
           },
           { income: 0, outcome: 0 },
         )
-
-        console.log(income, outcome)
-
         setSummary({
-          income: income.toFixed(2),
-          outcome: outcome.toFixed(2),
-          total: (income - outcome).toFixed(2),
+          income: Number(income).toFixed(2),
+          outcome: Number(outcome).toFixed(2),
+          total: (Number(income) - Number(outcome)).toFixed(2),
         })
       }
     }
 
     fetchSummary()
-  }, [])
+  }, [user])
 
   return (
     <SummaryContainer>
@@ -64,7 +70,10 @@ export function Summary() {
           <span>Entradas</span>
           <ArrowCircleUp size={32} color="#00b37e" />
         </header>
-        <strong>R${summary.income}</strong>
+        <strong style={{ color: '#00b37e' }}>
+          {priceFormatter.format(summary.income)}
+        </strong>{' '}
+        {/* {priceFormatter.format(summary.income)} */}
       </SummaryCard>
 
       <SummaryCard>
@@ -72,7 +81,9 @@ export function Summary() {
           <span>Saídas</span>
           <ArrowCircleDown size={32} color="#f75a68" />
         </header>
-        <strong>R$ {summary.outcome}</strong>
+        <strong style={{ color: '#f75a68' }}>
+          {priceFormatter.format(summary.outcome)}
+        </strong>
       </SummaryCard>
 
       <SummaryCard variant="green">
@@ -80,7 +91,7 @@ export function Summary() {
           <span>Resumo</span>
           <CurrencyDollar size={32} color="#fff" />
         </header>
-        <strong>R$ {summary.total}</strong>
+        <strong>{priceFormatter.format(summary.total)}</strong>
       </SummaryCard>
     </SummaryContainer>
   )

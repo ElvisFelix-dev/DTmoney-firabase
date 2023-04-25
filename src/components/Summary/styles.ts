@@ -49,7 +49,7 @@ export const SummaryCard = styled.div<SummaryCardProps>`
   ${(props) =>
     props.variant === 'green' &&
     css`
-      background: ${props.theme['green-700']};
+      background: #015f43;
     `}
 
   @media (max-width: 768px) {
