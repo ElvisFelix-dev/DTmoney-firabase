@@ -5,7 +5,7 @@ export const HeaderContainer = styled.header`
   padding: 2.5rem 0 7.5rem;
 
   @media (max-width: 768px) {
-    padding: 1.5rem 0 5rem;
+    padding: 1.5rem 5rem 5rem;
   }
 `
 
@@ -20,7 +20,47 @@ export const HeaderContent = styled.div`
   align-items: center;
 
   @media (max-width: 768px) {
+    flex-direction: column;
+    align-items: flex-start;
     padding: 0 1rem;
+  }
+`
+
+export const InfoUser = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1rem;
+
+  span {
+    font-size: 1rem;
+    padding: 1rem;
+    font-weight: bold;
+    white-space: nowrap;
+  }
+
+  img {
+    width: 80px;
+    height: 80px;
+    margin-left: 1rem;
+    border-radius: 50%;
+  }
+
+  @media (max-width: 768px) {
+    margin-right: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    white-space: nowrap;
+
+    span {
+      font-size: 0.875rem;
+      padding: 0.75rem;
+    }
+
+    img {
+      width: 40px;
+      height: 40px;
+    }
   }
 `
 
@@ -39,7 +79,7 @@ export const NewTransactionButton = styled.button`
 
   @media (max-width: 768px) {
     height: 40px;
-    padding: 0 1rem;
+    padding: 0.75rem 1rem;
     font-size: 0.875rem;
   }
 

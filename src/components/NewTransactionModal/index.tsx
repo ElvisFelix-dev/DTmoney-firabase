@@ -41,8 +41,6 @@ export function NewTransactionModal() {
         category,
         type: transactionType,
       })
-
-      alert('Cadastrado com sucesso')
     }
   }
 

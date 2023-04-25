@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
+import { Helmet } from 'react-helmet-async'
+
 import { Footer } from '../../components/Footer'
 import { Header } from '../../components/Header'
 import { Summary } from '../../components/Summary'
 import { SearchForm } from './components/SearchForm'
 import { dateFormatter, priceFormatter } from '../../utils/formatter'
 import { firebase } from '../../services/firebase'
+
+import { useAuth } from '../../hook/useAuth'
 
 import {
   PriceHighLight,
@@ -22,6 +26,8 @@ interface TransactionProps {
 }
 
 export function Transactions() {
+  const { user } = useAuth()
+
   const [transactions, setTransactions] = useState<TransactionProps[]>([])
 
   useEffect(() => {
@@ -43,6 +49,9 @@ export function Transactions() {
 
   return (
     <div>
+      <Helmet>
+        <title>{`${user?.name} | DTmoney `}</title>
+      </Helmet>
       <Header />
       <Summary />
 
