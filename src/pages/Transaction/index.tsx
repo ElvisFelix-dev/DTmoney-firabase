@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Key } from 'react'
 import { Helmet } from 'react-helmet-async'
 
 import { Footer } from '../../components/Footer'
@@ -17,6 +17,8 @@ import {
 } from './styles'
 
 interface TransactionProps {
+  id: Key | null | undefined
+  createdAt: string | number | Date
   key: string
   description: string
   price: number
@@ -31,20 +33,23 @@ export function Transactions() {
   const [transactions, setTransactions] = useState<TransactionProps[]>([])
 
   useEffect(() => {
-    const fetchTransactions = async () => {
-      const snapshot = await firebase
-        .database()
-        .ref('transactions')
-        .once('value')
-      const transactionsData = snapshot.val()
-      const transactionsArray = Object.entries<TransactionProps>(
-        transactionsData || {},
-      ).map(([key, value]) => ({ ...value, key }))
+    const user = firebase.auth().currentUser
+    const transactionsRef = firebase
+      .database()
+      .ref(`users/${user?.uid}/transactions`)
 
-      setTransactions(transactionsArray)
-    }
+    transactionsRef.on('value', (snapshot) => {
+      const data = snapshot.val()
+      const transacoesArray = []
 
-    fetchTransactions()
+      // Transforma as transações em um array de objetos
+      for (const id in data) {
+        transacoesArray.push({ id, ...data[id] })
+      }
+
+      // Atualiza o estado com o array de transações
+      setTransactions(transacoesArray)
+    })
   }, [])
 
   return (
@@ -60,7 +65,7 @@ export function Transactions() {
         <TransactionsTable>
           <tbody>
             {transactions.map((transaction) => (
-              <tr key={transaction.key}>
+              <tr key={transaction.id}>
                 <td>{transaction.description}</td>
                 <td>
                   <PriceHighLight variant={transaction.type}>
@@ -69,7 +74,7 @@ export function Transactions() {
                   </PriceHighLight>
                 </td>
                 <td>{transaction.category}</td>
-                <td>{dateFormatter.format(new Date(transaction.date))}</td>
+                <td>{dateFormatter.format(new Date(transaction.createdAt))}</td>
               </tr>
             ))}
           </tbody>

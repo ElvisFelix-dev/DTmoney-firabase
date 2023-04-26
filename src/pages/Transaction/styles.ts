@@ -61,8 +61,5 @@ interface PriceHighLightProps {
 }
 
 export const PriceHighLight = styled.span<PriceHighLightProps>`
-  color: 
-    variant === 'income'
-      ? #00B37E
-      : #F75A68;
+  color: ${(props) => (props.variant === 'income' ? '#00B37E' : '#F75A68')};
 `

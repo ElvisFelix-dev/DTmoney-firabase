@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import * as Dialog from '@radix-ui/react-dialog'
 import {
   CloseButton,
@@ -19,14 +19,6 @@ export function NewTransactionModal() {
   const [category, setCategory] = useState('')
   const { user } = useAuth()
 
-  useEffect(() => {
-    const usersRef = firebase.database().ref('users')
-    usersRef.on('value', (snapshot) => {
-      const transactions = snapshot.val()
-      console.log(transactions)
-    })
-  }, [])
-
   async function handleTransactions() {
     if (description !== '' && price !== '' && category !== '') {
       const id = user?.id
@@ -40,6 +32,7 @@ export function NewTransactionModal() {
         price,
         category,
         type: transactionType,
+        createdAt: firebase.database.ServerValue.TIMESTAMP,
       })
     }
   }
